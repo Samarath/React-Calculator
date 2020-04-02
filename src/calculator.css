@@ -8,9 +8,18 @@ body{
     background-color: darkgrey;
 }
 
+@font-face{
+    font-family: 'digital-7';
+    src: local('digital-7'), url(./digital-7.ttf) format('truetype');
+}
+
+p{
+    font-family: digital-7;
+}
+
 #main-div{
     width: 30%;
-    height: 71%;
+    height: 480px;
     position: absolute;
 	top:0;
 	bottom: 0;
@@ -22,13 +31,11 @@ body{
 }
 
 .display{
-    /* background-color: rgba(16, 44, 136, 0.37); */
     color: blanchedalmond;
-    font-size: 2rem;
+    font-size: 3rem;
 }
 
 .info{
-    /* background-color: rgba(16, 44, 136, 0.37); */
     color: yellow;
 }
 
@@ -69,13 +76,11 @@ button:hover{
 @media only screen and (max-width: 768px){
     #main-div{
         width: 40%;
-        height: 47%;
     }
 }
 
 @media only screen and (max-width: 420px){
     #main-div{
         width: 90%;
-        height: 65%;
     }
 }

@@ -1,9 +1,10 @@
 import React from 'react';
 
-const Display = () => {
+const Display = (props) => {
+   console.log(props.btnName)
     return(
         <div className='display'>
-          <p>Display</p>  
+          <p dir='rtl' id='displayCal'>0</p>  
         </div>
     )
 }
