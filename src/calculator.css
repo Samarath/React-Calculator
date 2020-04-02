@@ -17,9 +17,19 @@ p{
     font-family: digital-7;
 }
 
+input{
+    font-family: digital-7;
+    font-size: 3rem;
+    width: 100%;
+    color: white;
+    background-color: rgba(60, 72, 110, 0.479);
+    border: none;
+    padding: 2px;
+}
+
 #main-div{
     width: 30%;
-    height: 480px;
+    height: 490px;
     position: absolute;
 	top:0;
 	bottom: 0;
