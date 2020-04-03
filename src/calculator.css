@@ -28,7 +28,7 @@ input{
 }
 
 #main-div{
-    width: 30%;
+    width: 400px;
     height: 490px;
     position: absolute;
 	top:0;
@@ -83,7 +83,7 @@ button:hover{
     background-color: cornflowerblue;
 }
 
-@media only screen and (max-width: 768px){
+/* @media only screen and (max-width: 768px){
     #main-div{
         width: 40%;
     }
@@ -93,4 +93,4 @@ button:hover{
     #main-div{
         width: 90%;
     }
-}
+} */

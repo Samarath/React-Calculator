@@ -8,7 +8,7 @@ class Calculator extends React.Component{
         super();
         this.state = {
           buttonName: '',
-          update: 0,
+          update: 1,
           value: 0
         }
     }
@@ -17,12 +17,27 @@ class Calculator extends React.Component{
 
     let input = document.querySelector("#disp");
     let buttons = document.querySelectorAll("button.number-button");
+    
     const addFunc = (e) => {
-       input.value = input.value + e.currentTarget.value
-       console.log(e.currentTarget.value);
-      };
+      const currentValue = e.currentTarget.value;
+      if(currentValue === 'AC' || currentValue === '=' || currentValue === 'X' ||    currentValue === '/' || currentValue === '+' || currentValue === '-'){
+
+        if(currentValue === 'AC') input.value = 0;
+
+        console.log(e.currentTarget.value, 'inside');
+      }else{
+        const values = input.value + currentValue;
+
+        if(this.state.update){
+          input.value = values;
+          console.log(e.currentTarget.value)
+        }
+      }
+    };
+
+        
     buttons.forEach((ele, i) => {
-      buttons[i].addEventListener('click', addFunc)})
+    buttons[i].addEventListener('click', addFunc)})
 
     }
 
