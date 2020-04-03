@@ -82,15 +82,3 @@ button:hover{
     grid-column: 4/5;
     background-color: cornflowerblue;
 }
-
-/* @media only screen and (max-width: 768px){
-    #main-div{
-        width: 40%;
-    }
-}
-
-@media only screen and (max-width: 420px){
-    #main-div{
-        width: 90%;
-    }
-} */

@@ -20,17 +20,21 @@ class Calculator extends React.Component{
     
     const addFunc = (e) => {
       const currentValue = e.currentTarget.value;
+      let iv = input.value;
+
       if(currentValue === 'AC' || currentValue === '=' || currentValue === 'X' ||    currentValue === '/' || currentValue === '+' || currentValue === '-'){
 
         if(currentValue === 'AC') input.value = 0;
 
         console.log(e.currentTarget.value, 'inside');
       }else{
-        const values = input.value + currentValue;
-
-        if(this.state.update){
-          input.value = values;
-          console.log(e.currentTarget.value)
+        if(iv === '0'){
+          iv = '';
+        }
+        
+        input.value = iv + currentValue;
+        if(input.value.length > 16){
+          input.value = 'Digit limit'
         }
       }
     };
@@ -38,7 +42,6 @@ class Calculator extends React.Component{
         
     buttons.forEach((ele, i) => {
     buttons[i].addEventListener('click', addFunc)})
-
     }
 
     render(){
