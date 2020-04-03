@@ -2,14 +2,15 @@ import React from 'react';
 import DisplayInfo from './info'
 import Display from  './display';
 import Buttons from './buttons';
+import 'jquery';
+import $ from'jquery';
 
 class Calculator extends React.Component{
     constructor(){
         super();
         this.state = {
-          buttonName: '',
           update: 1,
-          value: 0
+          stopButton: true
         }
     }
 
@@ -17,26 +18,52 @@ class Calculator extends React.Component{
 
     let input = document.querySelector("#disp");
     let buttons = document.querySelectorAll("button.number-button");
+
+    const blink = () => {
+      $('#disp').fadeOut(500);
+      $('#disp').fadeIn(500);
+    }
+
+    const regainValue = () => {
+      input.value = this.state.update;
+    }
+
+    const disableButton = () => {
+      const idsOfButton = ['btn3', 'btn4', 'btn5', 'btn7', 'btn8', 'btn9', 'btn11', 'btn12', 'btn13', 'btn15', 'btn16'];
+      idsOfButton.forEach(ids => {
+        document.getElementById(ids).disabled = true;
+      })
+
+    }
     
     const addFunc = (e) => {
-      const currentValue = e.currentTarget.value;
+      let currentValue = e.currentTarget.value;
       let iv = input.value;
 
-      if(currentValue === 'AC' || currentValue === '=' || currentValue === 'X' ||    currentValue === '/' || currentValue === '+' || currentValue === '-'){
+      if(e.currentTarget.value === 'AC' || e.currentTarget.value === '=' || e.currentTarget.value === 'X' ||    e.currentTarget.value === '/' || e.currentTarget.value === '+' || e.currentTarget.value === '-'){
 
-        if(currentValue === 'AC') input.value = 0;
+        if(e.currentTarget.value === 'AC') input.value = 0;
 
         console.log(e.currentTarget.value, 'inside');
       }else{
-        if(iv === '0'){
-          iv = '';
+        if(iv === '0'){ //For making the intial zero disappear
+          iv = ''; 
         }
         
-        input.value = iv + currentValue;
-        if(input.value.length > 16){
-          input.value = 'Digit limit'
+        if(this.state.stopButton){
+          input.value = iv + currentValue;
+          console.log('buttonupdate', this.state.stopButton);
+        }
+        
+        if(input.value.length > 15){
+          this.setState({update: iv + e.currentTarget.value, stopButton: false});
+          input.value = 'Digit limit';
+          blink();
+          setTimeout(regainValue, 1000);
+          disableButton();
         }
       }
+
     };
 
         

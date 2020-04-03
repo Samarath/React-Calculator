@@ -3,7 +3,7 @@ import React from 'react';
 const Display = (props) => {
     return(
         <div className='display'>
-          <input defaultValue={0} dir='rtl' id='disp' readOnly maxLength={16}/>  
+          <input type="text" maxLength={10} id='disp' defaultValue={0} dir='rtl' readOnly/>
         </div>
     )
 }
