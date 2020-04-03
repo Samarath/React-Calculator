@@ -28,11 +28,18 @@ class Calculator extends React.Component{
       input.value = this.state.update;
     }
 
-    const disableButton = () => {
+    const disableButton = (direction) => {
       const idsOfButton = ['btn3', 'btn4', 'btn5', 'btn7', 'btn8', 'btn9', 'btn11', 'btn12', 'btn13', 'btn15', 'btn16'];
-      idsOfButton.forEach(ids => {
-        document.getElementById(ids).disabled = true;
-      })
+      if(direction){
+           idsOfButton.forEach(ids => {
+          document.getElementById(ids).disabled = true;
+        })
+      }else{
+        idsOfButton.forEach(ids => {
+          document.getElementById(ids).disabled = false;
+        })
+      }
+      
 
     }
     
@@ -42,7 +49,11 @@ class Calculator extends React.Component{
 
       if(e.currentTarget.value === 'AC' || e.currentTarget.value === '=' || e.currentTarget.value === 'X' ||    e.currentTarget.value === '/' || e.currentTarget.value === '+' || e.currentTarget.value === '-'){
 
-        if(e.currentTarget.value === 'AC') input.value = 0;
+        if(e.currentTarget.value === 'AC'){
+           input.value = 0;
+           this.setState({stopButton: true});
+           disableButton(false);
+          };
 
         console.log(e.currentTarget.value, 'inside');
       }else{
@@ -52,15 +63,14 @@ class Calculator extends React.Component{
         
         if(this.state.stopButton){
           input.value = iv + currentValue;
-          console.log('buttonupdate', this.state.stopButton);
         }
         
-        if(input.value.length > 15){
+        if(input.value.length > 14){
           this.setState({update: iv + e.currentTarget.value, stopButton: false});
           input.value = 'Digit limit';
           blink();
           setTimeout(regainValue, 1000);
-          disableButton();
+          disableButton(true);
         }
       }
 

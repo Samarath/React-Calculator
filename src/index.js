@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './calculator.css';
-import './digital-7.ttf'
 import Calculator from './calculatorContainer';
+import './calculator.css';
+import './digital-7.ttf';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(<Calculator />, document.getElementById('root')
