@@ -1,10 +1,9 @@
 import React from 'react';
 
 const Buttons = (props) => {
-    // props.func(props.btn);
 
     return (
-        <button id={props.ids} className={props.class} value={props.value}> {props.btn} </button>
+        <button id={props.ids} value={props.value} onClick={(e) => props.func(e)}> {props.btn} </button>
     )
 }
 

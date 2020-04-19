@@ -1,9 +1,9 @@
 import React from 'react';
 
-const DisplayInfo = () => {
+const DisplayInfo = (props) => {
     return(
         <div className='info'>
-          <p dir='rtl'>Display some info</p>
+          <p id='info'>{props.display? props.display: ''}</p>
         </div> 
     )
 }

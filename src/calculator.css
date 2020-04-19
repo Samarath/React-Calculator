@@ -15,6 +15,7 @@ body{
 
 p{
     font-family: digital-7;
+    height: 15px;
 }
 
 input{
@@ -25,6 +26,11 @@ input{
     background-color: black;
     border: none;
     padding: 2px;
+    text-align: right;
+}
+
+input:focus, button{
+    outline: none;
 }
 
 #main-div{
@@ -47,6 +53,10 @@ input{
 
 .info{
     color: yellow;
+}
+
+.info p {
+    text-align: right;
 }
 
 button{
