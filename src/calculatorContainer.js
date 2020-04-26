@@ -3,6 +3,7 @@ import DisplayInfo from './info'
 import Display from  './display';
 import Buttons from './buttons';
 import 'jquery';
+import 'mathjs';
 import $ from'jquery';
 
 class Calculator extends React.Component{
@@ -13,6 +14,8 @@ class Calculator extends React.Component{
           displayValue: '',
           symbols: '',
           updatedValue: '',
+          mainValue: '',
+          sendValue: ''
         }
     }
 
@@ -31,12 +34,7 @@ class Calculator extends React.Component{
         }
       }
 
-      mainFunction = (e) =>{
-
-      //------------------------------for future-------------------------------
-      // ([-+]?[0-9]*\.?[0-9]+[\/\+\-\*])+([-+]?[0-9]*\.?[0-9]+)
-      // ^([-+]? ?(\d+|\(\g<1>\))( ?[-+*\/] ?\g<1>)?)$
-      // ----------------------------for future-------------------------      
+      mainFunction = (e) =>{    
       
       const input = document.getElementById('disp');
       const currentValue = e.target.value;
@@ -56,31 +54,46 @@ class Calculator extends React.Component{
       }
 
      //appear only once calculation value
-     if(currentValue === '+' || currentValue === '-' || currentValue === 'x' ||      currentValue === '/'){
+     if(currentValue === '+' || currentValue === '-' || currentValue === '*' ||      currentValue === '/'){
        appearCalsValue = currentValue;
        this.disableButton(false);
 
-      if(this.state.inputValue === '' || input.value === '0' || input.value === '+' ||input.value === '-' || input.value === '/' || input.value === 'x'){
+      if(this.state.inputValue === '' || input.value === '0' || input.value === '+' || input.value === '-' || input.value === '/' || input.value === '*'){
 
-        const updateCal = this.state.inputValue; 
+        const updateCal = this.state.inputValue;
         input.value = appearCalsValue;
 
-        if(updateCal === '0'){ // for removing initial zero from input when calculation appear
-          this.setState((preState) => {
-            return {displayValue: appearCalsValue}
-          });
-
+        if(updateCal === '0'){ 
+          // for removing initial zero from input when calculation appear
+          this.setState({displayValue:input.value});
         }else{
-          this.setState({displayValue:updateCal + appearCalsValue});
+
+          if(this.state.updatedValue !== ''){
+            this.setState({ displayValue:this.state.updatedValue +  input.value});
+
+          }else{
+
+             this.setState({displayValue:updateCal + appearCalsValue});
+          }
        }
        
       }else{
         input.value = appearCalsValue;
         this.setState((preState) => {
-          return {
-            displayValue: preState.displayValue + appearCalsValue,
-            updatedValue: preState.displayValue
+          
+          if(preState.displayValue.indexOf('=') !== -1){
+              return{
+                displayValue: this.state.mainValue,
+                updatedValue: this.state.mainValue
+              }
+          }else{
+              return {
+              displayValue: preState.displayValue + appearCalsValue,
+              updatedValue: preState.displayValue,
+            }
           }
+
+          
         });
      }
        
@@ -90,14 +103,16 @@ class Calculator extends React.Component{
       if(currentValue !== '='){  // to not show equal sign in the display
 
         if(currentValue === '.' || currentValue === '0.'){ //the issue of coming decimal without zero
-        if(input.value.slice(0,1) === '+' || input.value.slice(0,1) === '-' || input.value.slice(0,1) === 'x' || input.value.slice(0,1) === '/' ){
+        if(input.value.slice(0,1) === '+' || input.value.slice(0,1) === '-' || input.value.slice(0,1) === '*' || input.value.slice(0,1) === '/' ){
           
             input.value += '0' + currentValue;
             if(this.state.updatedValue !== ''){
+     
               this.setState({
                 displayValue:this.state.updatedValue +  input.value
               })
             }else{
+
               this.setState({displayValue: addSymbol + input.value});
             }
 
@@ -119,10 +134,12 @@ class Calculator extends React.Component{
 
           input.value = input.value + currentValue;
           if(this.state.updatedValue !== ''){
+            
             this.setState({
               displayValue:this.state.updatedValue + addSymbol + input.value
             })
           }else{
+
             this.setState({
               displayValue: addSymbol + input.value
             })
@@ -133,7 +150,7 @@ class Calculator extends React.Component{
         }else{ 
           
           let getFirstValue = ''
-          const removeValue = ['+','-','x','/'];
+          const removeValue = ['+','-','*','/'];
 
           removeValue.forEach(remove => {
             if(input.value.indexOf(remove) !== -1){
@@ -148,6 +165,7 @@ class Calculator extends React.Component{
                //  removing intial zero from info display
 
               if(input.value.slice(0,1) === '0'){
+  
                 input.value = input.value.replace('0', '') + currentValue;
                 this.setState({displayValue: input.value});
 
@@ -158,8 +176,11 @@ class Calculator extends React.Component{
               }
 
               if(this.state.updatedValue !== ''){
-                const update = this.state.updatedValue;
-                this.setState({displayValue: update + getFirstValue + input.value});
+
+              const update = this.state.updatedValue;
+              this.setState({displayValue: update + getFirstValue + input.value});
+              console.log('check here 11');
+
               }else{
                 this.setState({displayValue: getFirstValue + input.value});
               }
@@ -176,8 +197,37 @@ class Calculator extends React.Component{
          document.getElementById('btn16').disabled = true;
        }
       
-      if(currentValue === '='){
-        console.log(currentValue, 'Equal 1');
+      if(currentValue === '='){ 
+        const calculate = this.state.displayValue;
+        const math = require('mathjs');
+        let result, newCalcutionvalue = '';
+        const lastCalcutionValue = calculate.slice(calculate.length-1);
+        const regex = /^([-+/*])*/
+
+        //for stop giving error when a calcultion sign is detected at the end of the sting in calulate;
+        if(calculate.match(regex)){
+           
+          if(lastCalcutionValue === '+' || lastCalcutionValue === '-' || lastCalcutionValue === '*' || lastCalcutionValue === '/'){
+
+           newCalcutionvalue = calculate.slice(0, calculate.length-1);
+           result = math.evaluate(newCalcutionvalue); 
+          input.value = result;
+
+        }else{
+          result = math.evaluate(calculate); 
+          input.value = result;
+          
+        }
+         this.setState((preState) => {
+          return {
+             displayValue: preState.displayValue+ ' =' + result,
+             mainValue: result
+           }
+         })
+          
+        } 
+       
+
       }
 
       if(input.value.length > 14){
@@ -194,6 +244,15 @@ class Calculator extends React.Component{
       }
     }
 
+    
+  //    addbits =(s) => {
+  //     var total = 0;
+  //     s = s.replace(/\s/g, '').match(/[+\-\/]?([0-9\.\s]+)/g) || [];
+  //     while(s.length) total += parseFloat(s.shift());
+  //     return total;
+  //  }
+  
+
     componentDidMount() {
       window.onload= () => {
         document.getElementById("btn0").click();
@@ -202,7 +261,7 @@ class Calculator extends React.Component{
     }
 
     render(){
-        const NameOfButtons = ['AC', '/', 'x', '7', '8', '9', '-', '4', '5', '6', '+', '1', '2', '3', '=', '0', '.'];
+        const NameOfButtons = ['AC', '/', '*', '7', '8', '9', '-', '4', '5', '6', '+', '1', '2', '3', '=', '0', '.'];
         const mapped = NameOfButtons.map((names, i) => {
             return(
                 <Buttons btn={names} key={i} ids={`btn${i}`} value={names} func={this.mainFunction}/> 
@@ -210,13 +269,22 @@ class Calculator extends React.Component{
         })
         return(
         <>
-          <div id='main-div'>
+          <div id='main-div'>   
+
+          <div id="calculation">
             <DisplayInfo display={this.state.displayValue}/>
-            <Display />
-            <div className='btns'>
-              {mapped}
+          </div>
+
+          <div>
+            <div>
+              <Display />
             </div>
-            
+              
+            <div className='btns'>
+               {mapped}
+            </div>
+          </div>
+
           </div>  
         </> 
         )
