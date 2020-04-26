@@ -82,6 +82,7 @@ class Calculator extends React.Component{
         this.setState((preState) => {
           
           if(preState.displayValue.indexOf('=') !== -1){
+
               return{
                 displayValue: this.state.mainValue,
                 updatedValue: this.state.mainValue
@@ -102,7 +103,8 @@ class Calculator extends React.Component{
 
       if(currentValue !== '='){  // to not show equal sign in the display
 
-        if(currentValue === '.' || currentValue === '0.'){ //the issue of coming decimal without zero
+        if(currentValue === '.' || currentValue === '0.'){ 
+          //the issue of coming decimal without zero
         if(input.value.slice(0,1) === '+' || input.value.slice(0,1) === '-' || input.value.slice(0,1) === '*' || input.value.slice(0,1) === '/' ){
           
             input.value += '0' + currentValue;
@@ -179,7 +181,6 @@ class Calculator extends React.Component{
 
               const update = this.state.updatedValue;
               this.setState({displayValue: update + getFirstValue + input.value});
-              console.log('check here 11');
 
               }else{
                 this.setState({displayValue: getFirstValue + input.value});
@@ -198,35 +199,35 @@ class Calculator extends React.Component{
        }
       
       if(currentValue === '='){ 
-        const calculate = this.state.displayValue;
-        const math = require('mathjs');
-        let result, newCalcutionvalue = '';
-        const lastCalcutionValue = calculate.slice(calculate.length-1);
-        const regex = /^([-+/*])*/
+        if(this.state.displayValue.indexOf('=') === -1){//for preventing error when there is already has a result on display 
 
-        //for stop giving error when a calcultion sign is detected at the end of the sting in calulate;
-        if(calculate.match(regex)){
-           
-          if(lastCalcutionValue === '+' || lastCalcutionValue === '-' || lastCalcutionValue === '*' || lastCalcutionValue === '/'){
+          const calculate = this.state.displayValue;
+          const math = require('mathjs');
+          let result, newCalcutionvalue = '';
+          const lastCalcutionValue = calculate.slice(calculate.length-1);
+          const regex = /^([-+/*])*/
 
-           newCalcutionvalue = calculate.slice(0, calculate.length-1);
-           result = math.evaluate(newCalcutionvalue); 
+          //for stop giving error when a calcultion sign is detected at the end of the sting in calulate;
+          if(calculate.match(regex)){
+            
+            if(lastCalcutionValue === '+' || lastCalcutionValue === '-' || lastCalcutionValue === '*' || lastCalcutionValue === '/'){
+
+            newCalcutionvalue = calculate.slice(0, calculate.length-1);
+            result = math.evaluate(newCalcutionvalue); 
+
+          }else{
+            result = math.evaluate(calculate); 
+            
+          }
           input.value = result;
-
-        }else{
-          result = math.evaluate(calculate); 
-          input.value = result;
-          
+          this.setState((preState) => {
+            return {
+              displayValue: preState.displayValue+ ' =' + result,
+              mainValue: result
+            }
+          })
+          } 
         }
-         this.setState((preState) => {
-          return {
-             displayValue: preState.displayValue+ ' =' + result,
-             mainValue: result
-           }
-         })
-          
-        } 
-       
 
       }
 
@@ -244,14 +245,20 @@ class Calculator extends React.Component{
       }
     }
 
-    
-  //    addbits =(s) => {
-  //     var total = 0;
-  //     s = s.replace(/\s/g, '').match(/[+\-\/]?([0-9\.\s]+)/g) || [];
-  //     while(s.length) total += parseFloat(s.shift());
-  //     return total;
-  //  }
-  
+    //for futrue update
+    // abbreviate_number = (num, fixed) => { 
+    //   // when the result will cross the limit of it's length then apply this function
+
+    //   if (num === null) { return null; } // terminate early
+    //   if (num === 0) { return '0'; } // terminate early
+    //   fixed = (!fixed || fixed < 0) ? 0 : fixed; // number of decimal places to show
+    //   var b = (num).toPrecision(2).split("e"), // get power
+    //       k = b.length === 1 ? 0 : Math.floor(Math.min(b[1].slice(1), 14) / 3), // floor at decimals, ceiling at trillions
+    //       c = k < 1 ? num.toFixed(0 + fixed) : (num / Math.pow(10, k * 3) ).toFixed(1 + fixed), // divide by power
+    //       d = c < 0 ? c : Math.abs(c), // enforce -0 is 0
+    //       e = d + ['', 'K', 'M', 'B', 'T'][k]; // append power
+    //   return e;
+    // }
 
     componentDidMount() {
       window.onload= () => {

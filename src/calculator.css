@@ -53,6 +53,8 @@ input:focus, button{
     text-align: right;
     color: yellow;
     font-size: larger;
+    word-wrap: break-word;
+    height: auto;
 }
 
 button{
