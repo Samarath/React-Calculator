@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Calculator from './calculatorContainer';
-import './calculator.css';
-import './digital-7.ttf';
+import Calculator from './Containers/calculatorContainer';
+import './Components/calculator.css';
+import './Components/digital-7.ttf';
 import * as serviceWorker from './serviceWorker';
 
 

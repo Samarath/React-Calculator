@@ -1,7 +1,7 @@
 import React from 'react';
-import DisplayInfo from './info'
-import Display from  './display';
-import Buttons from './buttons';
+import DisplayInfo from '../Components/info'
+import Display from  '../Components/display';
+import Buttons from '../Components/buttons';
 import 'jquery';
 import 'mathjs';
 import $ from'jquery';
